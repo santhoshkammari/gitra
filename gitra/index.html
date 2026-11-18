@@ -1,84 +1,40 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gitra</title>
-<style>
-:root{color-scheme:dark;--canvas:#0d1117;--panel:#161b22;--border:#30363d;
---text:#e6edf3;--muted:#8b949e;--blue:#2f81f7;--green:#3fb950}
-*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);
-font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{height:64px;background:#010409;border-bottom:1px solid var(--border);
-display:flex;align-items:center;padding:0 max(24px,calc((100vw - 1280px)/2));gap:16px}
-.mark{font-size:20px;font-weight:700}.repo{color:var(--muted)}
-main{max-width:1280px;margin:24px auto;padding:0 24px}
-nav{display:flex;gap:24px;border-bottom:1px solid var(--border);margin-bottom:24px}
-nav a{padding:12px 4px;color:var(--muted);text-decoration:none}
-nav a.active{color:var(--text);border-bottom:2px solid #f78166}
-.summary,.box{border:1px solid var(--border);border-radius:6px;background:var(--panel)}
-.summary{padding:16px;margin-bottom:16px}.box{overflow:hidden}
-.row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--border)}
-.row:first-child{border-top:0}.row a{color:var(--blue);text-decoration:none}
-.row a:hover{text-decoration:underline}.name{flex:1}.muted{color:var(--muted)}
-pre{margin:0;padding:16px;overflow:auto;background:var(--canvas);font:12px/20px ui-monospace,monospace}
-.error{color:#ff7b72}
-@media(max-width:700px){main{padding:0 12px}header{padding:0 12px}.summary{padding:12px}}
-</style>
-</head>
-<body><header><span class="mark">◉</span><span class="repo" id="repo">Repository</span>
-<span class="muted" id="branch"></span></header>
-<main><nav><a class="active" href="#code">Code</a><a href="#changes">Changes</a></nav>
-<section class="summary" id="summary">Loading repository…</section>
-<section class="box" id="content"></section></main>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gitra</title><style>
+:root{color-scheme:dark;--canvas:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--red:#f85149}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{height:60px;background:#010409;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 32px;gap:12px}.mark{font-size:22px;font-weight:700}.repo{color:var(--blue);font-weight:600}
+main{max-width:1440px;margin:28px auto;padding:0 28px}.pr-head{padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:22px}
+h1{font-size:25px;font-weight:500;margin:0 0 8px}.refs{font-size:15px;color:var(--muted)}.refs b{color:var(--blue)}.description{margin-top:12px;color:#c9d1d9}
+.pr-stats{display:flex;gap:20px;margin-top:15px;color:var(--muted)}.pr-stats strong{color:var(--text)}.green{color:var(--green)!important}.red{color:var(--red)!important}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px;align-items:start}.tree{position:sticky;top:74px;border:1px solid var(--border);border-radius:6px;max-height:calc(100vh - 92px);overflow:auto;background:var(--panel)}
+.tree-title{padding:12px;font-weight:600;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel)}.tree-link{display:block;padding:8px 10px;color:var(--text);text-decoration:none;border-bottom:1px solid #21262d;font:12px ui-monospace,monospace;overflow-wrap:anywhere}.tree-link:hover{background:#21262d}.tree-count{display:block;color:var(--muted);margin-top:3px}
+.toolbar{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:16px;padding:12px 16px;background:#161b22;border:1px solid var(--border);border-radius:6px 6px 0 0}.toolbar strong{margin-right:auto}.button{border:1px solid var(--border);background:#21262d;color:var(--text);padding:5px 10px;border-radius:5px;cursor:pointer}.blocks{display:inline-flex;height:9px;vertical-align:middle;margin-left:6px}.blocks i{display:block;min-width:3px}.blocks .plus{background:var(--green)}.blocks .minus{background:var(--red)}
+.file{border:1px solid var(--border);border-top:0;background:var(--canvas);scroll-margin-top:58px}.file-head{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--border);font:12px ui-monospace,monospace}.file-head strong{font-weight:600;overflow-wrap:anywhere}.file-head .spacer{flex:1}.viewed{font:12px -apple-system,sans-serif;color:var(--muted);white-space:nowrap}.diff{overflow:auto;font:12px/20px ui-monospace,SFMono-Regular,monospace}.diff-row{display:grid;grid-template-columns:48px 48px 22px minmax(0,1fr);min-width:650px;white-space:pre}.ln{color:#6e7681;text-align:right;padding-right:9px;user-select:none;background:#0d1117}.code{padding:0 10px}.add{background:#12261e}.del{background:#2d1719}.add .code{background:#12261e}.del .code{background:#2d1719}.hunk{padding:5px 12px;background:#101d2f;color:#79c0ff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.empty{padding:24px;color:var(--muted)}.hidden{display:none}
+@media(max-width:800px){main{padding:0 12px}.layout{grid-template-columns:1fr}.tree{position:relative;top:auto;max-height:220px}.toolbar{top:0;flex-wrap:wrap}.pr-stats{flex-wrap:wrap}}
+</style></head><body><header><span class="mark">◉</span><span class="repo" id="repo">Gitra</span></header><main id="app"><div class="empty">Loading comparison…</div></main>
 <script>
-const root=document.getElementById("content");
-function row(name, detail, url=""){
-  const container=document.createElement("div");
-  container.className="row";
-  const label=document.createElement("span");
-  label.className="name";
-  if(url){
-    const link=document.createElement("a");
-    link.href=url;
-    link.textContent=name;
-    label.append(link);
-  }else{
-    label.textContent=name;
-  }
-  const metadata=document.createElement("span");
-  metadata.className="muted";
-  metadata.textContent=detail;
-  container.append(label,metadata);
-  return container;
-}
-async function load(){
-  const response=await fetch("/api/repository");
-  const data=await response.json();
-  document.getElementById("repo").textContent=data.name;
-  document.getElementById("branch").textContent=data.branch;
-  document.getElementById("summary").textContent=`${data.branch} · ${data.commit}`;
-  root.replaceChildren(...data.files.map(file=>row(file.name,file.kind,file.url)));
-}
-async function showFile(path){
-  const response=await fetch(`/api/file/${encodeURIComponent(path)}`);
-  const data=await response.json();
-  root.replaceChildren();
-  const back=document.createElement("div");
-  back.className="row";
-  back.innerHTML="<a href='#code'>← Repository</a>";
-  const preview=document.createElement("pre");
-  root.append(back,preview);
-  preview.textContent=data.content;
-}
-root.addEventListener("click",event=>{
-  const link=event.target.closest("a[href^='/api/file/']");
-  if(link){event.preventDefault();showFile(decodeURIComponent(link.pathname.slice(10)));}
-});
-load().catch(error=>{
-  const message=document.createElement("div");
-  message.className="row error";
-  message.textContent=error.message;
-  root.replaceChildren(message);
-});
+const app=document.querySelector("#app");
+function el(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node}
+function blocks(adds,dels){const wrap=el("span","blocks");const total=adds+dels||1;const plus=el("i","plus"),minus=el("i","minus");plus.style.width=`${Math.max(2,adds/total*38)}px`;minus.style.width=`${Math.max(2,dels/total*38)}px`;wrap.append(plus,minus);return wrap}
+function parsePatch(patch){const rows=[];let oldLine=0,newLine=0;for(const line of patch.split("\n")){if(line.startsWith("@@")){const match=line.match(/@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@/);if(match){oldLine=Number(match[1]);newLine=Number(match[2])}rows.push({hunk:line});continue}
+if(line.startsWith("diff ")||line.startsWith("index ")||line.startsWith("--- ")||line.startsWith("+++ ")||line.startsWith("similarity index")||line.startsWith("rename "))continue;
+if(line==="\\ No newline at end of file"){rows.push({marker:"",text:"No newline at end of file",kind:"note"});continue}
+if(line==="Binary files"||line.startsWith("Binary files ")){rows.push({marker:"",text:"Binary file not shown",kind:"note"});continue}
+if(line.startsWith("+")){rows.push({old:"",next:newLine++,marker:"+",text:line.slice(1),kind:"add"});continue}
+if(line.startsWith("-")){rows.push({old:oldLine++,next:"",marker:"−",text:line.slice(1),kind:"del"});continue}
+if(line.startsWith(" "))rows.push({old:oldLine++,next:newLine++,marker:" ",text:line.slice(1),kind:"context"});
+}return rows}
+function renderRows(container,patch,status){if(!patch){container.append(el("div","empty","Mode-only change; no text diff."));return}
+if(patch.includes("Binary files ")||patch.includes("GIT binary patch")){container.append(el("div","empty","Binary file not shown"));return}
+const rows=parsePatch(patch);if(!rows.length&&status.endsWith("0")){container.append(el("div","empty","Mode-only change; no text diff."));return}
+for(const row of rows){if(row.hunk){container.append(el("div","hunk",row.hunk));continue}const line=el("div",`diff-row ${row.kind==="add"?"add":row.kind==="del"?"del":""}`);line.append(el("span","ln",row.old??""),el("span","ln",row.next??""),el("span","ln",row.marker??""),el("span","code",row.text??""));container.append(line)}}
+async function start(){const route=location.pathname.match(/^\/(?:compare|pulls)\/(.+?)\.\.\.(.+)$/);const params=new URLSearchParams(location.search);const base=decodeURIComponent(route?.[1]||params.get("base")||"");const head=decodeURIComponent(route?.[2]||params.get("head")||"");if(!base||!head){const response=await fetch("/api/repository");const repo=await response.json();document.querySelector("#repo").textContent=repo.name;const summary=el("section","pr-head",`${repo.branch} · ${repo.commit}`);const files=el("section","tree");for(const file of repo.files){const row=el("div","tree-link");if(file.kind==="file"){const link=el("a","",file.name);link.href=file.url;link.style.color="var(--blue)";row.append(link)}else row.textContent=file.name;files.append(row)}app.replaceChildren(summary,files);files.addEventListener("click",async event=>{const link=event.target.closest("a[href^='/api/file/']");if(!link)return;event.preventDefault();const result=await fetch(link.href);const file=await result.json();const preview=el("pre","");preview.textContent=file.content;app.replaceChildren(summary,el("button","button","← Repository"),preview);app.querySelector("button").addEventListener("click",()=>app.replaceChildren(summary,files))});return}
+const query=`base=${encodeURIComponent(base)}&head=${encodeURIComponent(head)}`;const response=await fetch(`/api/compare?${query}`);if(!response.ok)throw new Error((await response.json()).error||"Comparison failed");const data=await response.json();const heading=el("section","pr-head");heading.append(el("h1","",params.get("title")||`${head} into ${base}`),el("div","refs",`${base} ← ${head}`));if(params.has("description"))heading.append(el("div","description",params.get("description")));const stats=el("div","pr-stats");stats.append(el("span","",`${data.commits} commits`),el("strong","",`${data.files.length} files changed`),el("strong","green",`+${data.adds}`),el("strong","red",`−${data.dels}`));heading.append(stats);
+const layout=el("div","layout"),tree=el("aside","tree"),treeTitle=el("div","tree-title",`Files changed (${data.files.length})`);treeTitle.append(el("span","green",` +${data.adds} `),el("span","red",`−${data.dels}`),blocks(data.adds,data.dels));tree.append(treeTitle);const content=el("section","");const toolbar=el("div","toolbar");toolbar.append(el("strong","",`Files changed (${data.files.length})`),el("span","green",`+${data.adds}`),el("span","red",`−${data.dels}`),blocks(data.adds,data.dels));const expand=el("button","button","Expand all"),collapse=el("button","button","Collapse all");toolbar.append(expand,collapse);content.append(toolbar);
+const cards=[];for(const [index,file] of data.files.entries()){const card=el("article","file");card.id=`file-${index}`;const fileHead=el("div","file-head");const label=file.old_path&&file.old_path!==file.path?`${file.old_path} → ${file.path}`:file.path;fileHead.append(el("strong","",label),el("span","spacer"),el("span","green",`+${file.adds}`),el("span","red",`−${file.dels}`),blocks(file.adds,file.dels));const viewed=el("label","viewed");const checkbox=el("input","");checkbox.type="checkbox";checkbox.checked=localStorage.getItem(`gitra-viewed:${base}:${head}:${file.path}`)==="true";checkbox.addEventListener("change",()=>localStorage.setItem(`gitra-viewed:${base}:${head}:${file.path}`,String(checkbox.checked)));viewed.append(checkbox,document.createTextNode(" Viewed"));fileHead.append(viewed);const diff=el("div","diff");card.append(fileHead,diff);content.append(card);cards.push({card,diff,file,loaded:false});const link=el("a","tree-link");link.href=`#${card.id}`;link.append(el("span","",label),el("span","tree-count",`+${file.adds} −${file.dels}`));tree.append(link);card.addEventListener("toggle",()=>{});fileHead.addEventListener("click",event=>{if(event.target.closest("label"))return;diff.classList.toggle("hidden")});}
+async function loadCard(item){if(item.loaded)return;item.loaded=true;const result=await fetch(`/api/compare/file?${query}&path=${encodeURIComponent(item.file.path)}`);if(!result.ok){item.diff.append(el("div","empty","Unable to load diff"));return}const detail=await result.json();renderRows(item.diff,detail.patch,detail.status)}
+for(const item of cards){const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){loadCard(item);observer.disconnect()}},{rootMargin:"300px"});observer.observe(item.card)}
+expand.addEventListener("click",()=>cards.forEach(item=>{item.diff.classList.remove("hidden");loadCard(item)}));collapse.addEventListener("click",()=>cards.forEach(item=>item.diff.classList.add("hidden")));layout.append(tree,content);app.replaceChildren(heading,layout);document.querySelector("#repo").textContent="Pull request"}
+start().catch(error=>app.replaceChildren(el("div","empty",error.message)));
 </script></body></html>
