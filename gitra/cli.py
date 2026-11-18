@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import http.server
 import json
-import os
 import socket
 import subprocess
 import webbrowser
@@ -13,90 +12,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 
-PAGE = """<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gitra</title>
-<style>
-:root{color-scheme:dark;--canvas:#0d1117;--panel:#161b22;--border:#30363d;
---text:#e6edf3;--muted:#8b949e;--blue:#2f81f7;--green:#3fb950}
-*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);
-font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{height:64px;background:#010409;border-bottom:1px solid var(--border);
-display:flex;align-items:center;padding:0 max(24px,calc((100vw - 1280px)/2));gap:16px}
-.mark{font-size:20px;font-weight:700}.repo{color:var(--muted)}
-main{max-width:1280px;margin:24px auto;padding:0 24px}
-nav{display:flex;gap:24px;border-bottom:1px solid var(--border);margin-bottom:24px}
-nav a{padding:12px 4px;color:var(--muted);text-decoration:none}
-nav a.active{color:var(--text);border-bottom:2px solid #f78166}
-.summary,.box{border:1px solid var(--border);border-radius:6px;background:var(--panel)}
-.summary{padding:16px;margin-bottom:16px}.box{overflow:hidden}
-.row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--border)}
-.row:first-child{border-top:0}.row a{color:var(--blue);text-decoration:none}
-.row a:hover{text-decoration:underline}.name{flex:1}.muted{color:var(--muted)}
-pre{margin:0;padding:16px;overflow:auto;background:var(--canvas);font:12px/20px ui-monospace,monospace}
-.error{color:#ff7b72}
-@media(max-width:700px){main{padding:0 12px}header{padding:0 12px}.summary{padding:12px}}
-</style>
-</head>
-<body><header><span class="mark">◉</span><span class="repo" id="repo">Repository</span>
-<span class="muted" id="branch"></span></header>
-<main><nav><a class="active" href="#code">Code</a><a href="#changes">Changes</a></nav>
-<section class="summary" id="summary">Loading repository…</section>
-<section class="box" id="content"></section></main>
-<script>
-const root=document.getElementById("content");
-function row(name, detail, url=""){
-  const container=document.createElement("div");
-  container.className="row";
-  const label=document.createElement("span");
-  label.className="name";
-  if(url){
-    const link=document.createElement("a");
-    link.href=url;
-    link.textContent=name;
-    label.append(link);
-  }else{
-    label.textContent=name;
-  }
-  const metadata=document.createElement("span");
-  metadata.className="muted";
-  metadata.textContent=detail;
-  container.append(label,metadata);
-  return container;
-}
-async function load(){
-  const response=await fetch("/api/repository");
-  const data=await response.json();
-  document.getElementById("repo").textContent=data.name;
-  document.getElementById("branch").textContent=data.branch;
-  document.getElementById("summary").textContent=`${data.branch} · ${data.commit}`;
-  root.replaceChildren(...data.files.map(file=>row(file.name,file.kind,file.url)));
-}
-async function showFile(path){
-  const response=await fetch(`/api/file/${encodeURIComponent(path)}`);
-  const data=await response.json();
-  root.replaceChildren();
-  const back=document.createElement("div");
-  back.className="row";
-  back.innerHTML="<a href='#code'>← Repository</a>";
-  const preview=document.createElement("pre");
-  root.append(back,preview);
-  preview.textContent=data.content;
-}
-root.addEventListener("click",event=>{
-  const link=event.target.closest("a[href^='/api/file/']");
-  if(link){event.preventDefault();showFile(decodeURIComponent(link.pathname.slice(10)));}
-});
-load().catch(error=>{
-  const message=document.createElement("div");
-  message.className="row error";
-  message.textContent=error.message;
-  root.replaceChildren(message);
-});
-</script></body></html>"""
+PAGE = Path(__file__).with_name("index.html").read_text(encoding="utf-8")
 
 
 def git(repo: Path, *args: str) -> str:

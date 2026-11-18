@@ -6,7 +6,8 @@ repository to start a local web server and open the repository in your browser.
 ## Install from a checkout
 
 ```bash
-python -m pip install .
+python -m venv .venv
+.venv/bin/python -m pip install .
 ```
 
 ## Run

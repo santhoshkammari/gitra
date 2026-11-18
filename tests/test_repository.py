@@ -31,14 +31,14 @@ def make_repository(tmp_path):
     return repo
 
 
-def test_repository_root_finds_parent_repository(tmp_path):
+def test_parent_repository_discovery(tmp_path):
     repo = make_repository(tmp_path)
     nested = repo / "src"
 
     assert repository_root(nested) == repo
 
 
-def test_repository_data_lists_root_files_and_directories(tmp_path):
+def test_repository_root_entries(tmp_path):
     repo = make_repository(tmp_path)
 
     data = repository_data(repo)
@@ -49,13 +49,13 @@ def test_repository_data_lists_root_files_and_directories(tmp_path):
     assert {"name": "src/", "kind": "directory", "url": ""} in data["files"]
 
 
-def test_file_content_reads_repository_file(tmp_path):
+def test_repository_file_read(tmp_path):
     repo = make_repository(tmp_path)
 
     assert file_content(repo, "README.md") == "# Sample\n"
 
 
-def test_file_content_rejects_path_outside_repository(tmp_path):
+def test_path_escape(tmp_path):
     repo = make_repository(tmp_path)
     outside = tmp_path / "secret.txt"
     outside.write_text("secret", encoding="utf-8")

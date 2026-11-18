@@ -16,5 +16,8 @@ gitra = "gitra.cli:main"
 [tool.setuptools]
 packages = ["gitra"]
 
+[tool.setuptools.package-data]
+gitra = ["index.html"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
